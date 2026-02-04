@@ -28,6 +28,26 @@ htmlcov/
 .dmypy.json
 dmypy.json
 
+# Node.js/JavaScript/TypeScript
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+.nuxt/
+.vuepress/dist
+.cache
+.static
+.svelte-kit/
+.svelte/
+.vercel/
+.output/
+dist/
+build/
+*.log
+.env*
+
 # IDEs
 .vscode/
 .idea/

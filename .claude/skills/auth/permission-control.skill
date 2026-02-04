@@ -1,0 +1,17 @@
+# Permission Control Skill
+name: "permission-control"
+description: "Implement role-based access control and permission management"
+triggers:
+  - "implement rbac"
+  - "add role-based access"
+  - "setup permission system"
+  - "configure user roles"
+execution:
+  steps:
+    - define_role_hierarchy
+    - implement_permission_checks
+    - setup_role_assignment
+    - add_access_control_middleware
+    - configure_admin_privileges
+config:
+  model_preference: claude-sonnet-4-5-20250929

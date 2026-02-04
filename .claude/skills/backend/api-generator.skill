@@ -1,0 +1,18 @@
+# Backend API Generator Skill
+name: "backend-api-generator"
+description: "Generate RESTful API endpoints with proper validation and error handling"
+triggers:
+  - "create api endpoints"
+  - "generate rest api"
+  - "build api routes"
+  - "implement api controllers"
+execution:
+  steps:
+    - define_api_routes
+    - implement_request_validation
+    - add_error_handling
+    - implement_business_logic
+    - add_response_formatting
+    - apply_security_measures
+config:
+  model_preference: claude-sonnet-4-5-20250929

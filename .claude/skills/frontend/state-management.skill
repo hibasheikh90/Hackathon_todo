@@ -1,0 +1,17 @@
+# Frontend State Management Skill
+name: "frontend-state-management"
+description: "Implement state management solutions for React applications"
+triggers:
+  - "implement state management"
+  - "add global state"
+  - "manage application state"
+  - "implement context or redux"
+execution:
+  steps:
+    - analyze_state_requirements
+    - choose_state_solution
+    - implement_context_or_redux
+    - create_custom_hooks
+    - optimize_performance
+config:
+  model_preference: claude-sonnet-4-5-20250929

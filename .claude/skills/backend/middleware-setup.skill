@@ -1,0 +1,17 @@
+# Backend Middleware Setup Skill
+name: "backend-middleware-setup"
+description: "Setup and configure middleware for authentication, logging, and error handling"
+triggers:
+  - "setup middleware"
+  - "configure authentication middleware"
+  - "add logging middleware"
+  - "implement error handling middleware"
+execution:
+  steps:
+    - identify_middleware_requirements
+    - implement_authentication_middleware
+    - add_logging_middleware
+    - setup_error_handling
+    - configure_cors_security
+config:
+  model_preference: claude-sonnet-4-5-20250929

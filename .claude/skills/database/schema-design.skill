@@ -1,0 +1,20 @@
+# Database Schema Design Skill
+name: "database-schema-design"
+description: "Design database schemas with proper relationships and constraints"
+triggers:
+  - "design database schema"
+  - "create database tables"
+  - "define table relationships"
+  - "setup database models"
+execution:
+  steps:
+    - analyze_data_requirements
+    - design_table_structures
+
+    
+    - define_relationships
+    - add_constraints_indexes
+    - implement_data_validation
+    - setup_migration_files
+config:
+  model_preference: claude-sonnet-4-5-20250929

@@ -1,0 +1,19 @@
+# Authentication Setup Skill
+name: "auth-setup"
+description: "Setup authentication system with user registration, login, and JWT management"
+triggers:
+  - "setup authentication"
+  - "implement user login"
+  - "add user registration"
+  - "configure jwt authentication"
+  - "implement oauth"
+execution:
+  steps:
+    - setup_user_model
+    - implement_registration_login
+    - configure_jwt_tokens
+    - add_password_hashing
+    - implement_session_management
+    - setup_oauth_providers
+config:
+  model_preference: claude-sonnet-4-5-20250929

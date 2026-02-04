@@ -1,0 +1,16 @@
+# Frontend Component Generator Skill
+name: "frontend-component-generator"
+description: "Generate React components with proper TypeScript typing and styling"
+triggers:
+  - "create a new react component"
+  - "generate a react component"
+  - "build a ui component"
+execution:
+  steps:
+    - create_component_files
+    - add_typescript_typing
+    - apply_styling_solution
+    - implement_responsive_design
+    - add_accessibility_features
+config:
+  model_preference: claude-sonnet-4-5-20250929

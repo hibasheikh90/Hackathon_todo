@@ -1,0 +1,18 @@
+# Query Optimization Skill
+name: "query-optimizer"
+description: "Optimize database queries and implement efficient data access patterns"
+triggers:
+  - "optimize database queries"
+  - "improve query performance"
+  - "add database indexing"
+  - "implement efficient data access"
+execution:
+  steps:
+    - analyze_query_performance
+    - identify_bottlenecks
+    - add_optimal_indexes
+    - optimize_join_patterns
+    - implement_caching_strategies
+    - setup_connection_pooling
+config:
+  model_preference: claude-sonnet-4-5-20250929
