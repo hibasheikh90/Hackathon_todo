@@ -11,6 +11,9 @@ from src.api.tasks import router as tasks_router
 from src.database import create_tables
 import asyncio
 import logging
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
