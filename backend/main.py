@@ -13,7 +13,12 @@ import asyncio
 import logging
 import sys
 import os
+
+# backend/main.py se src folder ka path add kar rahe hain
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+
+from middleware.input_sanitization import InputSanitizationMiddleware
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
