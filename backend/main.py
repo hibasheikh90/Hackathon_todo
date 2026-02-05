@@ -1,23 +1,22 @@
-import os
-from dotenv import load_dotenv
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
-from src.middleware.input_sanitization import InputSanitizationMiddleware
-from src.api.auth import router as auth_router
-from src.api.tasks import router as tasks_router
-from src.database import create_tables
-import asyncio
-import logging
 import sys
 import os
 
 # backend/main.py se src folder ka path add kar rahe hain
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
-from src.middleware.input_sanitization import InputSanitizationMiddleware
+from middleware.input_sanitization import InputSanitizationMiddleware
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from src.api.auth import router as auth_router
+from src.api.tasks import router as tasks_router
+from src.database import create_tables
+import asyncio
+import logging
+from dotenv import load_dotenv
+
 
 
 # Configure logging
