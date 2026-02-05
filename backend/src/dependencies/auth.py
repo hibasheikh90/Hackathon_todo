@@ -1,19 +1,19 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 import os
 from typing import Optional
-from ..database import get_sync_session
+from ..database import get_async_session
 from ..models.user import User
 
 
 security = HTTPBearer()
 
 
-def get_current_user(
+async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ) -> User:
     """
     Dependency to get current authenticated user from JWT token
@@ -55,9 +55,9 @@ def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    # Query the database for the user using sync session
+    # Query the database for the user using async session
     from sqlmodel import select
-    result = db.execute(select(User).where(User.id == user_id))
+    result = await db.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()
 
     if user is None:
@@ -72,7 +72,7 @@ def get_current_user(
     return user
 
 
-def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
+async def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
     """
     Convenience dependency that ensures the user is active
     """
@@ -123,7 +123,7 @@ def get_user_id_from_token(
 
 
 # Optional: Role-based access control dependencies
-def require_admin_user(current_user: User = Depends(get_current_user)) -> User:
+async def require_admin_user(current_user: User = Depends(get_current_user)) -> User:
     """
     Dependency that requires the user to have admin privileges
     """
@@ -135,7 +135,7 @@ def require_admin_user(current_user: User = Depends(get_current_user)) -> User:
     return current_user
 
 
-def require_authenticated_user(current_user: User = Depends(get_current_user)) -> User:
+async def require_authenticated_user(current_user: User = Depends(get_current_user)) -> User:
     """
     Simple dependency that just requires authentication
     """

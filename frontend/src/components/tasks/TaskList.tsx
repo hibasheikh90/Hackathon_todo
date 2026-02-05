@@ -77,12 +77,12 @@ export default function TaskList() {
 
   if (loading) {
     return (
-      <div className="bg-white shadow rounded-lg p-6 mb-6">
+      <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 mb-6">
         <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="h-4 bg-gray-600 rounded w-1/4 mb-4"></div>
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-100 rounded"></div>
+              <div key={i} className="h-16 bg-gray-700/50 rounded"></div>
             ))}
           </div>
         </div>
@@ -91,10 +91,10 @@ export default function TaskList() {
   }
 
   return (
-    <div className="bg-white shadow rounded-lg p-6 mb-6">
+    <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-medium text-gray-900">Your Tasks</h2>
-        <span className="text-sm text-gray-500">
+        <h2 className="text-lg font-medium text-white">Your Tasks</h2>
+        <span className="text-sm text-gray-400">
           {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
         </span>
       </div>
@@ -109,7 +109,7 @@ export default function TaskList() {
 
       {tasks.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-500">No tasks yet. Create your first task!</p>
+          <p className="text-gray-400">No tasks yet. Create your first task!</p>
         </div>
       ) : (
         <div className="space-y-4">

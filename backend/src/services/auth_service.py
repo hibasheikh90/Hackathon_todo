@@ -3,9 +3,9 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 import os
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from ..models.user import User, UserCreate, UserLogin
-from ..database.utils import user_crud
+from ..database.async_utils import async_user_crud
 
 
 class AuthService:
@@ -13,7 +13,7 @@ class AuthService:
     Authentication service handling user registration, login, and JWT token management
     """
 
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         self.secret_key = os.getenv("BETTER_AUTH_SECRET", "fallback_secret_for_dev")
@@ -29,7 +29,7 @@ class AuthService:
         """Hash a plain password"""
         return self.pwd_context.hash(password)
 
-    def register_user(self, user_data: UserCreate) -> User:
+    async def register_user(self, user_data: UserCreate) -> User:
         """
         Register a new user with email and password
 
@@ -53,7 +53,7 @@ class AuthService:
             raise ValueError("Password must be at least 8 characters")
 
         # Check if user already exists
-        existing_user = user_crud.get_by_email_sync(self.db, user_data.email)
+        existing_user = await async_user_crud.get_by_email(self.db, user_data.email)
         if existing_user:
             raise ValueError("Email already registered")
 
@@ -68,12 +68,12 @@ class AuthService:
 
         # Save to database
         try:
-            created_user = user_crud.create_sync(self.db, user)
+            created_user = await async_user_crud.create(self.db, user)
             return created_user
         except Exception as e:
             raise ValueError(f"Failed to create user: {str(e)}")
 
-    def authenticate_user(self, email: str, password: str) -> Optional[Dict[str, str]]:
+    async def authenticate_user(self, email: str, password: str) -> Optional[Dict[str, str]]:
         """
         Authenticate a user with email and password
 
@@ -85,7 +85,7 @@ class AuthService:
             Optional[Dict]: Dictionary containing access_token if authentication succeeds, None otherwise
         """
         # Get user from database
-        user = user_crud.get_by_email_sync(self.db, email)
+        user = await async_user_crud.get_by_email(self.db, email)
 
         if not user or not self.verify_password(password, user.password_hash):
             return None
@@ -155,7 +155,7 @@ class AuthService:
         except JWTError:
             return None
 
-    def get_user_from_token(self, token: str) -> Optional[User]:
+    async def get_user_from_token(self, token: str) -> Optional[User]:
         """
         Get user from JWT token
 
@@ -173,9 +173,6 @@ class AuthService:
         if user_id is None:
             return None
 
-        # Debug: print the user_id to see what we're getting
-        print(f"DEBUG: get_user_from_token received user_id: {user_id}, type: {type(user_id)}")
-
         # Get user from database
-        user = user_crud.get_by_id_sync(self.db, user_id)
+        user = await async_user_crud.get_by_id(self.db, user_id)
         return user

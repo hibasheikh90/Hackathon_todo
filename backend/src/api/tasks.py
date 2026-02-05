@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from fastapi import Request
-from ..database import get_sync_session
+from ..database import get_async_session
 from ..models.task import TaskCreate, TaskRead, TaskUpdate
 from ..models.user import User
 from ..services.task_service import TaskService
@@ -21,10 +21,10 @@ router = APIRouter(tags=["Tasks"])
 
 @router.get("/", response_model=List[TaskRead])
 @limiter.limit("30/minute")
-def get_tasks(
+async def get_tasks(
     request: Request,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Get all tasks for the current user
@@ -36,7 +36,7 @@ def get_tasks(
         security_logger.log_data_access_attempt(request, str(current_user.id), "tasks", "read")
 
         task_service = TaskService(db)
-        tasks = task_service.get_tasks_by_user(current_user.id)
+        tasks = await task_service.get_tasks_by_user(current_user.id)
 
         # Log successful data access
         security_logger.log_data_access_success(request, str(current_user.id), "tasks", "read")
@@ -54,11 +54,11 @@ def get_tasks(
 
 @router.post("/", response_model=TaskRead)
 @limiter.limit("20/minute")
-def create_task(
+async def create_task(
     request: Request,
     task_data: TaskCreate,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Create a new task for the current user
@@ -70,7 +70,7 @@ def create_task(
         security_logger.log_data_access_attempt(request, str(current_user.id), "tasks", "create")
 
         task_service = TaskService(db)
-        task = task_service.create_task_for_user(task_data, current_user.id)
+        task = await task_service.create_task_for_user(task_data, current_user.id)
 
         # Log successful data access
         security_logger.log_data_access_success(request, str(current_user.id), "tasks", "create")
@@ -96,11 +96,11 @@ def create_task(
 
 @router.get("/{task_id}", response_model=TaskRead)
 @limiter.limit("30/minute")
-def get_task(
+async def get_task(
     request: Request,
     task_id: str,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Get a specific task by ID
@@ -112,7 +112,7 @@ def get_task(
         security_logger.log_data_access_attempt(request, str(current_user.id), f"task:{task_id}", "read")
 
         task_service = TaskService(db)
-        task = task_service.get_task_by_id_and_user(task_id, current_user.id)
+        task = await task_service.get_task_by_id_and_user(task_id, current_user.id)
 
         if not task:
             # Log ownership error
@@ -140,12 +140,12 @@ def get_task(
 
 @router.put("/{task_id}", response_model=TaskRead)
 @limiter.limit("20/minute")
-def update_task(
+async def update_task(
     request: Request,
     task_id: str,
     task_data: TaskUpdate,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Update a specific task
@@ -157,7 +157,7 @@ def update_task(
         security_logger.log_data_access_attempt(request, str(current_user.id), f"task:{task_id}", "update")
 
         task_service = TaskService(db)
-        updated_task = task_service.update_task_by_user(
+        updated_task = await task_service.update_task_by_user(
             task_id, task_data, current_user.id
         )
 
@@ -196,11 +196,11 @@ def update_task(
 
 @router.delete("/{task_id}")
 @limiter.limit("20/minute")
-def delete_task(
+async def delete_task(
     request: Request,
     task_id: str,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Delete a specific task
@@ -212,7 +212,7 @@ def delete_task(
         security_logger.log_data_access_attempt(request, str(current_user.id), f"task:{task_id}", "delete")
 
         task_service = TaskService(db)
-        task_service.delete_task_by_user(task_id, current_user.id)
+        await task_service.delete_task_by_user(task_id, current_user.id)
 
         # Log successful data access
         security_logger.log_data_access_success(request, str(current_user.id), f"task:{task_id}", "delete")
@@ -241,11 +241,11 @@ def delete_task(
 
 @router.patch("/{task_id}/complete", response_model=TaskRead)
 @limiter.limit("30/minute")
-def toggle_task_completion(
+async def toggle_task_completion(
     request: Request,
     task_id: str,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Toggle the completion status of a task
@@ -257,7 +257,7 @@ def toggle_task_completion(
         security_logger.log_data_access_attempt(request, str(current_user.id), f"task:{task_id}", "toggle_completion")
 
         task_service = TaskService(db)
-        updated_task = task_service.toggle_task_completion(task_id, current_user.id)
+        updated_task = await task_service.toggle_task_completion(task_id, current_user.id)
 
         # Log successful data access
         security_logger.log_data_access_success(request, str(current_user.id), f"task:{task_id}", "toggle_completion")

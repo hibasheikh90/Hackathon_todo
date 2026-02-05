@@ -8,6 +8,13 @@ from slowapi.errors import RateLimitExceeded
 from src.middleware.input_sanitization import InputSanitizationMiddleware
 from src.api.auth import router as auth_router
 from src.api.tasks import router as tasks_router
+from src.database import create_tables
+import asyncio
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -42,6 +49,16 @@ def create_app() -> FastAPI:
     @app.get("/")
     def read_root():
         return {"message": "Todo API is running!"}
+
+    @app.on_event("startup")
+    async def on_startup():
+        logger.info("Initializing database tables...")
+        try:
+            await create_tables()
+            logger.info("Database tables created successfully!")
+        except Exception as e:
+            logger.warning(f"Warning: Could not initialize database tables: {e}")
+            # Continue startup even if DB initialization fails (for cases like connection issues)
 
     return app
 

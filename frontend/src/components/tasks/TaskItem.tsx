@@ -51,31 +51,31 @@ export default function TaskItem({ task, onToggle, onDelete, onUpdate }: TaskIte
   };
 
   return (
-    <div className={`border rounded-lg p-4 ${task.is_completed ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
+    <div className={`border rounded-lg p-4 ${task.is_completed ? 'bg-gray-700/30 border-green-500/30' : 'bg-gray-800/30 border-gray-700/50'}`}>
       {isEditing ? (
         <div className="space-y-3">
           <input
             type="text"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-3 py-1 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-600 rounded-md px-3 py-1 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700/50 text-white"
           />
           <textarea
             value={editDescription}
             onChange={(e) => setEditDescription(e.target.value)}
             rows={2}
-            className="w-full border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-600 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-700/50 text-white"
           />
           <div className="flex space-x-2">
             <button
               onClick={handleSave}
-              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Save
             </button>
             <button
               onClick={handleCancel}
-              className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center px-3 py-1 border border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
               Cancel
             </button>
@@ -86,7 +86,7 @@ export default function TaskItem({ task, onToggle, onDelete, onUpdate }: TaskIte
           <div className="flex items-start">
             <button
               onClick={onToggle}
-              className={`mr-3 mt-1 ${task.is_completed ? 'text-green-500' : 'text-gray-300'} hover:text-green-600`}
+              className={`mr-3 mt-1 ${task.is_completed ? 'text-green-400' : 'text-gray-400'} hover:text-green-300`}
               aria-label={task.is_completed ? 'Mark as incomplete' : 'Mark as complete'}
             >
               {task.is_completed ? (
@@ -96,11 +96,11 @@ export default function TaskItem({ task, onToggle, onDelete, onUpdate }: TaskIte
               )}
             </button>
             <div className="flex-1">
-              <h3 className={`text-lg font-medium ${task.is_completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+              <h3 className={`text-lg font-medium ${task.is_completed ? 'line-through text-gray-400' : 'text-white'}`}>
                 {task.title}
               </h3>
               {task.description && (
-                <p className={`mt-1 text-gray-600 ${task.is_completed ? 'line-through' : ''}`}>
+                <p className={`mt-1 text-gray-300 ${task.is_completed ? 'line-through' : ''}`}>
                   {task.description}
                 </p>
               )}
@@ -112,14 +112,14 @@ export default function TaskItem({ task, onToggle, onDelete, onUpdate }: TaskIte
             <div className="flex space-x-2 ml-2">
               <button
                 onClick={() => setIsEditing(true)}
-                className="text-gray-400 hover:text-indigo-600"
+                className="text-gray-400 hover:text-indigo-400"
                 aria-label="Edit task"
               >
                 <PencilIcon className="h-5 w-5" />
               </button>
               <button
                 onClick={onDelete}
-                className="text-gray-400 hover:text-red-600"
+                className="text-gray-400 hover:text-red-400"
                 aria-label="Delete task"
               >
                 <TrashIcon className="h-5 w-5" />

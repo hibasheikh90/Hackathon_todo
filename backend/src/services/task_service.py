@@ -1,8 +1,8 @@
 import logging
 from typing import List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from ..models.task import Task, TaskCreate, TaskUpdate
-from ..database.utils import task_crud
+from ..database.async_utils import async_task_crud
 from ..errors.task_errors import TaskOwnershipError, TaskNotFoundError
 
 # Set up logging
@@ -15,10 +15,10 @@ class TaskService:
     Handles business logic for task management
     """
 
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
-    def get_tasks_by_user(self, user_id: str) -> List[Task]:
+    async def get_tasks_by_user(self, user_id: str) -> List[Task]:
         """
         Get all tasks for a specific user
 
@@ -28,10 +28,10 @@ class TaskService:
         Returns:
             List of tasks belonging to the user
         """
-        tasks = task_crud.get_tasks_by_user(self.db, user_id)
+        tasks = await async_task_crud.get_tasks_by_user(self.db, user_id)
         return tasks
 
-    def create_task_for_user(self, task_data: TaskCreate, user_id: str) -> Task:
+    async def create_task_for_user(self, task_data: TaskCreate, user_id: str) -> Task:
         """
         Create a new task for a specific user
 
@@ -56,10 +56,10 @@ class TaskService:
             raise ValueError("Task description must be 10000 characters or less")
 
         # Create the task
-        task = task_crud.create_task_for_user(self.db, task_data, user_id)
+        task = await async_task_crud.create_task_for_user(self.db, task_data, user_id)
         return task
 
-    def get_task_by_id_and_user(self, task_id: str, user_id: str) -> Optional[Task]:
+    async def get_task_by_id_and_user(self, task_id: str, user_id: str) -> Optional[Task]:
         """
         Get a specific task by its ID and user ID
 
@@ -70,14 +70,14 @@ class TaskService:
         Returns:
             Task object if found and belongs to user, None otherwise
         """
-        task = task_crud.get_task_by_id_and_user(self.db, task_id, user_id)
+        task = await async_task_crud.get_task_by_id_and_user(self.db, task_id, user_id)
 
         if not task:
             logger.warning(f"Unauthorized access attempt: User {user_id} tried to access task {task_id} that does not belong to them")
 
         return task
 
-    def update_task_by_user(self, task_id: str, task_data: TaskUpdate, user_id: str) -> Optional[Task]:
+    async def update_task_by_user(self, task_id: str, task_data: TaskUpdate, user_id: str) -> Optional[Task]:
         """
         Update a task if it belongs to the user
 
@@ -104,7 +104,7 @@ class TaskService:
                 raise ValueError("Task description must be 10000 characters or less")
 
         # Update the task in the database
-        updated_task = task_crud.update_task_for_user(self.db, task_id, task_data, user_id)
+        updated_task = await async_task_crud.update_task_for_user(self.db, task_id, task_data, user_id)
 
         if not updated_task:
             logger.warning(f"Unauthorized access attempt: User {user_id} tried to update task {task_id} that does not belong to them")
@@ -112,7 +112,7 @@ class TaskService:
 
         return updated_task
 
-    def delete_task_by_user(self, task_id: str, user_id: str) -> bool:
+    async def delete_task_by_user(self, task_id: str, user_id: str) -> bool:
         """
         Delete a task if it belongs to the user
 
@@ -124,7 +124,7 @@ class TaskService:
             True if deletion was successful, False if task doesn't belong to user
         """
         # Delete the task from the database
-        deleted = task_crud.delete_task_for_user(self.db, task_id, user_id)
+        deleted = await async_task_crud.delete_task_for_user(self.db, task_id, user_id)
 
         if not deleted:
             logger.warning(f"Unauthorized access attempt: User {user_id} tried to delete task {task_id} that does not belong to them")
@@ -132,7 +132,7 @@ class TaskService:
 
         return deleted
 
-    def toggle_task_completion(self, task_id: str, user_id: str) -> Optional[Task]:
+    async def toggle_task_completion(self, task_id: str, user_id: str) -> Optional[Task]:
         """
         Toggle the completion status of a task
 
@@ -144,16 +144,15 @@ class TaskService:
             Updated Task object with toggled completion status, None if task doesn't belong to user
         """
         # Get the task to toggle
-        task = self.get_task_by_id_and_user(task_id, user_id)
+        task = await self.get_task_by_id_and_user(task_id, user_id)
 
         if not task:
             logger.warning(f"Unauthorized access attempt: User {user_id} tried to toggle completion of task {task_id} that does not belong to them")
             raise TaskOwnershipError("Task not found or does not belong to the current user")
 
         # Create a TaskUpdate object with the toggled status
-        from ..models.task import TaskUpdate
         task_update = TaskUpdate(is_completed=not task.is_completed)
 
         # Update the task in the database
-        updated_task = task_crud.update_task_for_user(self.db, task_id, task_update, user_id)
+        updated_task = await async_task_crud.update_task_for_user(self.db, task_id, task_update, user_id)
         return updated_task

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Dict
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from fastapi import Request
-from ..database import get_sync_session
+from ..database import get_async_session
 from ..models.user import UserCreate, UserLogin, UserRead
 from ..services.auth_service import AuthService
 from ..dependencies.auth import get_current_user
@@ -19,10 +19,10 @@ router = APIRouter(tags=["Authentication"])
 
 @router.post("/signup", response_model=UserRead)
 @limiter.limit("5/minute")
-def signup(
+async def signup(
     request: Request,
     user_data: UserCreate,
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ):
     """
     Create a new user account
@@ -32,7 +32,7 @@ def signup(
     """
     try:
         auth_service = AuthService(db)
-        user = auth_service.register_user(user_data)
+        user = await auth_service.register_user(user_data)
 
         # Log successful signup
         security_logger.log_auth_signup_success(request, str(user.id))
@@ -58,10 +58,10 @@ def signup(
 
 @router.post("/login")
 @limiter.limit("10/minute")
-def login(
+async def login(
     request: Request,
     user_credentials: UserLogin,
-    db: Session = Depends(get_sync_session)
+    db: AsyncSession = Depends(get_async_session)
 ) -> Dict[str, str]:
     """
     Authenticate user and return JWT token
@@ -72,7 +72,7 @@ def login(
     try:
         # Use the AuthService for consistent authentication
         auth_service = AuthService(db)
-        token_data = auth_service.authenticate_user(
+        token_data = await auth_service.authenticate_user(
             user_credentials.email,
             user_credentials.password
         )
@@ -92,7 +92,7 @@ def login(
             )
 
         # Log successful authentication
-        user = auth_service.get_user_from_token(token_data["access_token"])
+        user = await auth_service.get_user_from_token(token_data["access_token"])
         if user:
             security_logger.log_auth_login_success(request, str(user.id))
 
