@@ -1,7 +1,8 @@
 fastapi
 uvicorn
+sqlmodel
+sqlalchemy
+pydantic
 slowapi
 python-dotenv
-SQLAlchemy[asyncio]
-asyncpg
 
