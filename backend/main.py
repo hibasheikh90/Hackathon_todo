@@ -2,7 +2,7 @@ import sys
 import os
 
 # Add backend/src folder to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__),  "src"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
