@@ -3,8 +3,8 @@ from sqlalchemy.exc import IntegrityError
 from typing import List, Optional, Generic, TypeVar, Type
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import and_, or_
-from ..models.user import User
-from ..models.task import Task
+from backend.src.models.user import User
+from backend.src.models.task import Task
 
 
 T = TypeVar('T')

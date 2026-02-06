@@ -3,7 +3,7 @@ from fastapi.security.http import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 from typing import Optional
 import os
-from ..models.user import UserRead
+from backend.src.models.user import UserRead
 
 
 class JWTBearer(HTTPBearer):

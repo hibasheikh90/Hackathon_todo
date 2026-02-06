@@ -11,13 +11,13 @@ from fastapi import Request
 # from ..dependencies.auth import get_current_user
 # from ..errors.task_errors import TaskOwnershipError, TaskNotFoundError
 # from ..logging.security_logging import security_logger
-from database import get_async_session
-from models.task import TaskCreate, TaskRead, TaskUpdate
-from models.user import User
-from services.task_service import TaskService
-from dependencies.auth import get_current_user
-from errors.task_errors import TaskOwnershipError, TaskNotFoundError
-from logging.security_logging import security_logger
+from backend.src.database import get_async_session
+from backend.src.models.task import TaskCreate, TaskRead, TaskUpdate
+from backend.src.models.user import User
+from backend.src.services.task_service import TaskService
+from backend.src.dependencies.auth import get_current_user
+from backend.src.errors.task_errors import TaskOwnershipError, TaskNotFoundError
+from backend.src.logging.security_logging import security_logger
 
 
 # Initialize limiter for this module

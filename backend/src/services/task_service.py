@@ -1,9 +1,9 @@
 import logging
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..models.task import Task, TaskCreate, TaskUpdate
-from ..database.async_utils import async_task_crud
-from ..errors.task_errors import TaskOwnershipError, TaskNotFoundError
+from backend.src.models.task import Task, TaskCreate, TaskUpdate
+from backend.src.database.async_utils import async_task_crud
+from backend.src.errors.task_errors import TaskOwnershipError, TaskNotFoundError
 
 # Set up logging
 logger = logging.getLogger(__name__)

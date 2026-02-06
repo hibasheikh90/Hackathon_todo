@@ -106,8 +106,8 @@ class CRUDBase(Generic[T]):
         return obj
 
 
-from ..models.user import User
-from ..models.task import Task
+from backend.src.models.user import User
+from backend.src.models.task import Task
 
 
 class UserCRUD(CRUDBase):

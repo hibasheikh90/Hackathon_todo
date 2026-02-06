@@ -4,8 +4,8 @@ from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 import os
 from typing import Optional
-from ..database import get_async_session
-from ..models.user import User
+from backend.src.database import get_async_session
+from backend.src.models.user import User
 
 
 security = HTTPBearer()

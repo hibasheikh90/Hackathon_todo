@@ -4,8 +4,8 @@ from jose import jwt, JWTError
 from datetime import datetime, timedelta
 import os
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..models.user import User, UserCreate, UserLogin
-from ..database.async_utils import async_user_crud
+from backend.src.models.user import User, UserCreate, UserLogin
+from backend.src.database.async_utils import async_user_crud
 
 
 class AuthService:

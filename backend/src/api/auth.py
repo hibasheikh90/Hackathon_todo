@@ -9,11 +9,11 @@ from fastapi import Request
 # from src.services.auth_service import AuthService
 # from src.dependencies.auth import get_current_user
 # from src.logging.security_logging import security_logger
-from database import get_async_session
-from models.user import UserCreate, UserLogin, UserRead
-from services.auth_service import AuthService
-from dependencies.auth import get_current_user
-from logging.security_logging import security_logger
+from backend.src.database import get_async_session
+from backend.src.models.user import UserCreate, UserLogin, UserRead
+from backend.src.services.auth_service import AuthService
+from backend.src.dependencies.auth import get_current_user
+from backend.src.logging.security_logging import security_logger
 
 
 # Initialize limiter for this module

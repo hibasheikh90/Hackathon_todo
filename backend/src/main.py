@@ -85,10 +85,10 @@ from slowapi.errors import RateLimitExceeded
 from dotenv import load_dotenv
 import logging
 
-from middleware.input_sanitization import InputSanitizationMiddleware
-from api.auth import router as auth_router
-from api.tasks import router as tasks_router
-from database import create_tables
+from backend.src.middleware.input_sanitization import InputSanitizationMiddleware
+from backend.src.api.auth import router as auth_router
+from backend.src.api.tasks import router as tasks_router
+from backend.src.database import create_tables
 
 # Load environment variables
 load_dotenv()

@@ -90,8 +90,8 @@ async def get_async_session() -> AsyncSession:
 async def create_tables():
     """Create all tables in the database"""
     from sqlmodel import SQLModel
-    from ..models.user import User
-    from ..models.task import Task
+    from backend.src.models.user import User
+    from backend.src.models.task import Task
 
     async with async_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
@@ -100,8 +100,8 @@ async def create_tables():
 def drop_tables():
     """Drop all tables in the database (for testing)"""
     from sqlmodel import SQLModel
-    from ..models.user import User
-    from ..models.task import Task
+    from backend.src.models.user import User
+    from backend.src.models.task import Task
 
     with sync_engine.begin() as conn:
         SQLModel.metadata.drop_all(bind=conn)
