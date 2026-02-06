@@ -1,7 +1,7 @@
 import sys
 import os
 
-# backend/main.py se src folder ka path add kar rahe hain
+# Add src folder to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 from fastapi import FastAPI
@@ -14,10 +14,10 @@ import asyncio
 import logging
 
 # Correct imports from src folder
-from middleware.input_sanitization import InputSanitizationMiddleware
-from api.auth import router as auth_router
-from api.tasks import router as tasks_router
-from database import create_tables
+from src.middleware.input_sanitization import InputSanitizationMiddleware
+from src.api.auth import router as auth_router
+from src.api.tasks import router as tasks_router
+from src.database import create_tables
 
 
 

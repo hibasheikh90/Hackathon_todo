@@ -4,11 +4,12 @@ from typing import Dict
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from fastapi import Request
-from ..database import get_async_session
-from ..models.user import UserCreate, UserLogin, UserRead
-from ..services.auth_service import AuthService
-from ..dependencies.auth import get_current_user
-from ..logging.security_logging import security_logger
+from src.database import get_async_session
+from src.models.user import UserCreate, UserLogin, UserRead
+from src.services.auth_service import AuthService
+from src.dependencies.auth import get_current_user
+from src.logging.security_logging import security_logger
+
 
 # Initialize limiter for this module
 limiter = Limiter(key_func=get_remote_address)
