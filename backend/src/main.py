@@ -77,7 +77,6 @@
 
 
 # src/main.py
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -91,20 +90,25 @@ from api.auth import router as auth_router
 from api.tasks import router as tasks_router
 from database import create_tables
 
+# Load environment variables
+load_dotenv()
+
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-load_dotenv()
-
+# Rate limiter
 limiter = Limiter(key_func=get_remote_address)
 
-# --------- TOP LEVEL APP ----------
+# ------------------------
+# Top-level FastAPI app
+# ------------------------
 app = FastAPI(title="Todo API", version="1.0.0")
 
+# Middleware
 app.add_middleware(InputSanitizationMiddleware)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -113,13 +117,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Routers
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(tasks_router, prefix="/api/tasks", tags=["Tasks"])
 
+# Root endpoint
 @app.get("/")
 def read_root():
     return {"message": "Todo API is running!"}
 
+# Startup event
 @app.on_event("startup")
 async def on_startup():
     logger.info("Initializing database tables...")
