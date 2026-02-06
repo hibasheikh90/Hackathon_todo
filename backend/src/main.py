@@ -74,7 +74,6 @@
 # if __name__ == "__main__":
 #     import uvicorn
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -125,3 +124,4 @@ async def on_startup():
         logger.info("Database tables created successfully!")
     except Exception as e:
         logger.warning(f"Warning: Could not initialize database tables: {e}")
+
