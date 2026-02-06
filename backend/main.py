@@ -1,8 +1,8 @@
 import sys
 import os
 
-# Add src folder to path for imports
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+# Add backend/src folder to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "backend", "src"))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,13 +13,11 @@ from dotenv import load_dotenv
 import asyncio
 import logging
 
-# Correct imports from src folder
-from src.middleware.input_sanitization import InputSanitizationMiddleware
-from src.api.auth import router as auth_router
-from src.api.tasks import router as tasks_router
-from src.database import create_tables
-
-
+# Absolute imports from src
+from middleware.input_sanitization import InputSanitizationMiddleware
+from api.auth import router as auth_router
+from api.tasks import router as tasks_router
+from database import create_tables
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +25,6 @@ logger = logging.getLogger(__name__)
 
 # Load environment variables from .env file
 load_dotenv()
-
 
 # Initialize the limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -73,7 +70,6 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-
 
 if __name__ == "__main__":
     import uvicorn
