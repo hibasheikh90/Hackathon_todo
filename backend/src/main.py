@@ -74,6 +74,10 @@
 # if __name__ == "__main__":
 #     import uvicorn
 #     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
+# src/main.py
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -94,7 +98,7 @@ load_dotenv()
 
 limiter = Limiter(key_func=get_remote_address)
 
-# --------- Direct app definition -----------
+# --------- TOP LEVEL APP ----------
 app = FastAPI(title="Todo API", version="1.0.0")
 
 app.add_middleware(InputSanitizationMiddleware)
@@ -124,4 +128,3 @@ async def on_startup():
         logger.info("Database tables created successfully!")
     except Exception as e:
         logger.warning(f"Warning: Could not initialize database tables: {e}")
-
