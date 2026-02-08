@@ -262,7 +262,7 @@ class AsyncTaskCRUD(AsyncCRUDBase):
             return False
 
         try:
-            db.delete(db_task)
+            await db.delete(db_task)
             await db.commit()
             return True
         except IntegrityError:

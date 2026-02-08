@@ -86,6 +86,8 @@ async def create_tables():
     from sqlmodel import SQLModel
     from .models.user import User
     from .models.task import Task
+    from .models.conversation import Conversation
+    from .models.message import Message
 
     async with async_engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)

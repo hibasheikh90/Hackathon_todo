@@ -1,15 +1,27 @@
 import sys
 import os
 
-# Add backend/src folder to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+# Compute key directories
+_src_dir = os.path.dirname(os.path.abspath(__file__))        # backend/src/
+_backend_dir = os.path.dirname(_src_dir)                      # backend/
+_project_root = os.path.dirname(_backend_dir)                 # hackathon_todo/
+
+# Add src/ for bare imports (database_hf, middleware, api, etc.)
+if _src_dir not in sys.path:
+    sys.path.insert(0, _src_dir)
+# Add project root so backend.src.* imports used by sub-modules resolve
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+# Load .env BEFORE any imports that read DATABASE_URL at import time
+from dotenv import load_dotenv
+load_dotenv(os.path.join(_backend_dir, ".env"))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from dotenv import load_dotenv
 import asyncio
 import logging
 
@@ -17,14 +29,13 @@ import logging
 from middleware.input_sanitization import InputSanitizationMiddleware
 from api.auth import router as auth_router
 from api.tasks import router as tasks_router
+from api.chat import router as chat_router
+from api.chatkit_endpoint import router as chatkit_router
 from database_hf import create_tables
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Initialize the limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -51,6 +62,8 @@ def create_app() -> FastAPI:
     # Include routers
     app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
     app.include_router(tasks_router, prefix="/api/tasks", tags=["Tasks"])
+    app.include_router(chat_router, prefix="/api", tags=["Chat"])
+    app.include_router(chatkit_router, prefix="/api", tags=["ChatKit"])
 
     @app.get("/")
     def read_root():

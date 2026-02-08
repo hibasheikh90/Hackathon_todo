@@ -1,4 +1,5 @@
 import { AuthProvider } from '@/contexts/AuthContext';
+import ChatLayout from '@/components/chat/ChatLayout';
 import type { Metadata } from 'next';
 import '../globals.css';
 
@@ -19,6 +20,7 @@ export default function RootLayout({
           <div className="min-h-screen bg-gray-50">
             {children}
           </div>
+          <ChatLayout />
         </AuthProvider>
       </body>
     </html>

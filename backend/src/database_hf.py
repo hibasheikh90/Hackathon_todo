@@ -113,6 +113,8 @@ async def create_tables():
     from sqlmodel import SQLModel
     from .models.user import User
     from .models.task import Task
+    from .models.conversation import Conversation
+    from .models.message import Message
 
     if DATABASE_URL.startswith("sqlite"):
         # For SQLite, use sync engine

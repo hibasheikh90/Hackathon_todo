@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MCP Todo Tools Contract",
+  "description": "JSON Schema contract for the 5 MCP tools exposed by the Todo MCP Server. These schemas define the inputSchema that appears in tools/list responses.",
+  "tools": [
+    {
+      "name": "add_task",
+      "description": "Create a new todo task for a user. Use this when the user wants to add, create, or remember something as a task. Returns the created task's ID, status, and title.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique identifier of the user creating the task"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the task (1-255 characters)",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional detailed description of the task (max 10000 characters)",
+            "maxLength": 10000
+          }
+        },
+        "required": ["user_id", "title"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["created"] },
+          "title": { "type": "string" }
+        },
+        "required": ["task_id", "status", "title"]
+      }
+    },
+    {
+      "name": "list_tasks",
+      "description": "Retrieve all tasks for a user, optionally filtered by completion status. Use this when the user wants to see, show, or review their tasks. Returns an array of task objects.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique identifier of the user whose tasks to list"
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by status: 'all' (default), 'pending' (incomplete only), or 'completed' (done only)",
+            "enum": ["all", "pending", "completed"],
+            "default": "all"
+          }
+        },
+        "required": ["user_id"]
+      },
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "is_completed": { "type": "boolean" },
+            "created_at": { "type": "string", "format": "date-time" }
+          },
+          "required": ["id", "title", "is_completed", "created_at"]
+        }
+      }
+    },
+    {
+      "name": "complete_task",
+      "description": "Toggle the completion status of a task. If the task is pending, it becomes completed. If already completed, it reverts to pending. Use this when the user says they finished, completed, or are done with a task.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique identifier of the user who owns the task"
+          },
+          "task_id": {
+            "type": "string",
+            "description": "The unique identifier of the task to toggle completion"
+          }
+        },
+        "required": ["user_id", "task_id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["completed", "pending"] },
+          "title": { "type": "string" }
+        },
+        "required": ["task_id", "status", "title"]
+      }
+    },
+    {
+      "name": "delete_task",
+      "description": "Permanently remove a task from the user's list. Use this when the user wants to delete, remove, or cancel a task. This action cannot be undone.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique identifier of the user who owns the task"
+          },
+          "task_id": {
+            "type": "string",
+            "description": "The unique identifier of the task to delete"
+          }
+        },
+        "required": ["user_id", "task_id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["deleted"] },
+          "title": { "type": "string" }
+        },
+        "required": ["task_id", "status", "title"]
+      }
+    },
+    {
+      "name": "update_task",
+      "description": "Modify the title and/or description of an existing task. Use this when the user wants to change, rename, edit, or update a task's details. Only the provided fields are updated; omitted fields remain unchanged.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique identifier of the user who owns the task"
+          },
+          "task_id": {
+            "type": "string",
+            "description": "The unique identifier of the task to update"
+          },
+          "title": {
+            "type": "string",
+            "description": "New title for the task (1-255 characters)",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "description": "New description for the task (max 10000 characters)",
+            "maxLength": 10000
+          }
+        },
+        "required": ["user_id", "task_id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["updated"] },
+          "title": { "type": "string" }
+        },
+        "required": ["task_id", "status", "title"]
+      }
+    }
+  ]
+}

@@ -11,3 +11,6 @@ asyncpg>=0.30.0
 sqlalchemy>=2.0.36
 alembic>=1.14.0
 slowapi>=0.1.9
+mcp[cli]>=1.26.0
+openai-agents>=0.8.0
+openai-chatkit>=0.0.2
